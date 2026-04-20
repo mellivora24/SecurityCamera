@@ -2,7 +2,7 @@
   description = "Lean dev shell: Expo + Python (FastAPI + ML)";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -14,39 +14,37 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            # Expo
-            nodejs
+            nodejs_20
 
-            # Python
-            python312
+            python310
             uv
 
-            # đủ để opencv / onnxruntime không chết
-            stdenv.cc.cc
+            stdenv.cc 
+
             zlib
             glib
             libglvnd
           ];
 
           shellHook = ''
+            cd backend
+
             export UV_PROJECT_ENVIRONMENT=.venv
 
             if [ ! -d .venv ]; then
-              uv venv .venv --python ${pkgs.python312}/bin/python3.12
+              uv venv .venv --python ${pkgs.python310}/bin/python3.10
             fi
 
             source .venv/bin/activate
 
             export LD_LIBRARY_PATH="${
               pkgs.lib.makeLibraryPath [
-                pkgs.stdenv.cc.cc
+                pkgs.stdenv.cc   # cũng sửa luôn ở đây
                 pkgs.zlib
                 pkgs.glib
                 pkgs.libglvnd
               ]
             }:$LD_LIBRARY_PATH"
-
-            echo "ready"
           '';
         };
       });
