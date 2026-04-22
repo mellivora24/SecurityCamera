@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-#define WIFI_SSID "XYZ"
-#define WIFI_PASSWORD "hoianhHung"
+#define WIFI_SSID "GiapGK"
+#define WIFI_PASSWORD "vangiap123"
 
 // Optional network identity.
 #define CAMERA_HOSTNAME "esp32cam-node-01"

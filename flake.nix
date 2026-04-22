@@ -14,20 +14,28 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
+            # Node
             nodejs_20
 
+            # Python
             python310
             uv
 
-            stdenv.cc 
+            stdenv.cc
+            stdenv.cc.cc.lib
 
+            # ML native deps
             zlib
             glib
             libglvnd
+
+            pkg-config
+            gnumake
           ];
 
           shellHook = ''
-            cd backend
+            # vào backend nếu tồn tại
+            cd backend 2>/dev/null || true
 
             export UV_PROJECT_ENVIRONMENT=.venv
 
@@ -37,14 +45,19 @@
 
             source .venv/bin/activate
 
-            export LD_LIBRARY_PATH="${
+            export NIX_LD=${pkgs.stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
+
+            export NIX_LD_LIBRARY_PATH="${
               pkgs.lib.makeLibraryPath [
-                pkgs.stdenv.cc   # cũng sửa luôn ở đây
+                pkgs.stdenv.cc.cc.lib
                 pkgs.zlib
                 pkgs.glib
                 pkgs.libglvnd
               ]
-            }:$LD_LIBRARY_PATH"
+            }"
+
+            # fallback (một số tool vẫn cần)
+            export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH"
           '';
         };
       });
