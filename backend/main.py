@@ -322,7 +322,7 @@ class CameraWorker:
 
 
 def build_app() -> FastAPI:
-	esp32_url = os.getenv("ESP32CAM_URL", "http://192.168.1.100/stream")
+	esp32_url = os.getenv("ESP32CAM_URL", "http://192.168.137.239/stream")
 	face_dir = Path(os.getenv("FACE_DB_DIR", "faces"))
 	face_threshold = float(os.getenv("FACE_SIMILARITY_THRESHOLD", "0.45"))
 	stream_jpeg_quality = int(os.getenv("STREAM_JPEG_QUALITY", "90"))
